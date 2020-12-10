@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 import Navbar from '../components/navbar';
+import ShowList from '../components/show-list';
 
 const Container = styled.div`
     display: flex;
@@ -17,5 +18,6 @@ export default function Home() {
             <title>MyMovieList</title>
         </Helmet>
         <Navbar/>
+        <ShowList style={{marginLeft: "40px"}} />
     </Container>
 }
