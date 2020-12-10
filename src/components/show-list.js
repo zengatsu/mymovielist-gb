@@ -1,7 +1,21 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { RiDeleteBinFill } from 'react-icons/ri';
 import styled from 'styled-components';
+import ShowService from '../services/show-service';
 import Show from './show';
+
+function InitializeShows(showsSetter) {
+    ShowService.getShows()
+        .then(showsSetter)
+        .catch((error) => {
+            if (error.name === "SyntaxError") {
+                const confirmed = window.confirm("Stored data is corrupted! \nWould you like to clear the list?");
+                if (confirmed) {
+                    showsSetter([]);
+                }
+            }
+        });
+}
 
 const StyledShowList = styled.div`
     display: flex;
@@ -108,6 +122,15 @@ export default function ShowList({style}) {
 
     const [shows, setShows] = useState([]);
     const [expandedShow, setExpandedShow] = useState(null)
+
+    // initialize the show list from the show store.
+    useEffect(() => {
+        InitializeShows(setShows);
+    }, [])
+
+    useEffect(() => {
+        ShowService.saveShows(shows).then();
+    }, [shows]);
 
     let showElements = shows.map((show, i) => {
         show.delete = (event) => {
