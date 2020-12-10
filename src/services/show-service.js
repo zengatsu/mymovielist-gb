@@ -3,7 +3,7 @@ async function getShows() {
     const shows = JSON.parse(json);
 
     if (!shows) {
-        window.localStorage.setItem("shows", JSON.stringify([]));
+        localStorage.setItem("shows", JSON.stringify([]));
         console.log("There is no shows list, an empty one is created!");
     }
 

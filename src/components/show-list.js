@@ -2,13 +2,14 @@ import React, {useState, useEffect, useRef} from 'react';
 import { RiDeleteBinFill } from 'react-icons/ri';
 import styled from 'styled-components';
 import ShowService from '../services/show-service';
+import Popup from './popup';
 import Show from './show';
 
 function InitializeShows(showsSetter) {
     ShowService.getShows()
-        .then(showsSetter)
+        .then((shows) => shows && showsSetter(shows))
         .catch((error) => {
-            if (error.name === "SyntaxError") {
+            if (error.name === "SyntaxError" && typeof window !== "undefined") {
                 const confirmed = window.confirm("Stored data is corrupted! \nWould you like to clear the list?");
                 if (confirmed) {
                     showsSetter([]);
@@ -89,7 +90,7 @@ function ShowWrapper({show, expandedShow}) {
             document.removeEventListener("click", onClick, true)
             document.removeEventListener("touchend", onClick, true)
         }
-    }, []);
+    });
 
     const toggleExpand = (show) => {
         if (expandedShow.show === show){
@@ -147,6 +148,7 @@ export default function ShowList({style}) {
     });
 
     return <StyledShowList style={style}>
+        <Popup shows={{shows, setShows}}/>
         {showElements}
     </StyledShowList>;
 }
